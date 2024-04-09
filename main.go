@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"io"
 	"log"
 	"net/http"
 )
@@ -40,6 +41,7 @@ func handleRequests() {
 
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/planets", returnAllPlanets)
+	router.HandleFunc("/planet", createNewPlanet).Methods("POST")
 	router.HandleFunc("/planet/{id}", returnSinglePlanet)
 
 	log.Fatalln(http.ListenAndServe(":10000", router))
@@ -74,4 +76,14 @@ func returnSinglePlanet(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(planet)
 		}
 	}
+}
+
+func createNewPlanet(w http.ResponseWriter, r *http.Request) {
+	reqBody, _ := io.ReadAll(r.Body)
+	var planet Planet
+
+	json.Unmarshal(reqBody, &planet)
+
+	Planets = append(Planets, planet)
+	json.NewEncoder(w).Encode(planet)
 }
