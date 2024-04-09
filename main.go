@@ -9,13 +9,13 @@ import (
 )
 
 type Planet struct {
-	ID               string
-	Name             string
-	PlanetType       PlanetType
-	Mass             float64
-	Radius           float64
-	OrbitalPeriod    float64
-	DistanceFromStar float64
+	ID               string     `json:"Id"`
+	Name             string     `json:"Name"`
+	PlanetType       PlanetType `json:"PlanetType"`
+	Mass             float64    `json:"Mass"`
+	Radius           float64    `json:"Radius"`
+	OrbitalPeriod    float64    `json:"OrbitalPeriod"`
+	DistanceFromStar float64    `json:"DistanceFromStar"`
 }
 
 type PlanetType int
@@ -40,6 +40,7 @@ func handleRequests() {
 
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/planets", returnAllPlanets)
+	router.HandleFunc("/planet/{id}", returnSinglePlanet)
 
 	log.Fatalln(http.ListenAndServe(":10000", router))
 }
@@ -62,4 +63,15 @@ func main() {
 func returnAllPlanets(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Endpoint Hit: returnAllPlanets")
 	json.NewEncoder(w).Encode(Planets)
+}
+
+func returnSinglePlanet(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	for _, planet := range Planets {
+		if planet.ID == key {
+			json.NewEncoder(w).Encode(planet)
+		}
+	}
 }
