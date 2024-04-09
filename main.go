@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
@@ -35,9 +36,12 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
-	http.HandleFunc("/", homePage)
-	http.HandleFunc("/planets", returnAllPlanets)
-	log.Fatal(http.ListenAndServe(":10000", nil))
+	router := mux.NewRouter().StrictSlash(true)
+
+	router.HandleFunc("/", homePage)
+	router.HandleFunc("/planets", returnAllPlanets)
+
+	log.Fatalln(http.ListenAndServe(":10000", router))
 }
 
 func main() {
