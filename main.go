@@ -42,7 +42,8 @@ func handleRequests() {
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/planets", returnAllPlanets)
 	router.HandleFunc("/planet", createNewPlanet).Methods("POST")
-	router.HandleFunc("/planet/{id}", returnSinglePlanet)
+	router.HandleFunc("/planet/{id}", returnSinglePlanet).Methods("GET")
+	router.HandleFunc("/planet/{id}", deletePlanet).Methods("DELETE")
 
 	log.Fatalln(http.ListenAndServe(":10000", router))
 }
@@ -86,4 +87,16 @@ func createNewPlanet(w http.ResponseWriter, r *http.Request) {
 
 	Planets = append(Planets, planet)
 	json.NewEncoder(w).Encode(planet)
+}
+
+func deletePlanet(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	id := vars["id"]
+
+	for index, planet := range Planets {
+		if planet.ID == id {
+			Planets = append(Planets[:index], Planets[index+1:]...)
+		}
+	}
 }
