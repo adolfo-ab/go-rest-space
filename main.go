@@ -44,6 +44,7 @@ func handleRequests() {
 	router.HandleFunc("/planet", createNewPlanet).Methods("POST")
 	router.HandleFunc("/planet/{id}", returnSinglePlanet).Methods("GET")
 	router.HandleFunc("/planet/{id}", deletePlanet).Methods("DELETE")
+	router.HandleFunc("/planet/{id}", updatePlanet).Methods("PUT")
 
 	log.Fatalln(http.ListenAndServe(":10000", router))
 }
@@ -64,16 +65,15 @@ func main() {
 }
 
 func returnAllPlanets(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Endpoint Hit: returnAllPlanets")
 	json.NewEncoder(w).Encode(Planets)
 }
 
 func returnSinglePlanet(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	key := vars["id"]
+	id := vars["id"]
 
 	for _, planet := range Planets {
-		if planet.ID == key {
+		if planet.ID == id {
 			json.NewEncoder(w).Encode(planet)
 		}
 	}
@@ -91,12 +91,30 @@ func createNewPlanet(w http.ResponseWriter, r *http.Request) {
 
 func deletePlanet(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-
 	id := vars["id"]
 
 	for index, planet := range Planets {
 		if planet.ID == id {
 			Planets = append(Planets[:index], Planets[index+1:]...)
+		}
+	}
+}
+
+func updatePlanet(w http.ResponseWriter, r *http.Request) {
+	reqBody, _ := io.ReadAll(r.Body)
+	var newPlanet Planet
+	json.Unmarshal(reqBody, &newPlanet)
+
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	if newPlanet.ID != id {
+		return
+	}
+
+	for index, planet := range Planets {
+		if planet.ID == id {
+			Planets[index] = newPlanet
 		}
 	}
 }
