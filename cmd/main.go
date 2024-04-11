@@ -1,31 +1,24 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
-	"io"
 	"log"
 	"main/internal/domain/planet"
+	"main/internal/interfaces"
 	"net/http"
 )
 
 var Planets []planet.Planet
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the HomePage!")
-	fmt.Println("Endpoint Hit: homePage")
-}
-
 func handleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/", homePage)
-	router.HandleFunc("/planets", returnAllPlanets)
-	router.HandleFunc("/planet", createNewPlanet).Methods("POST")
-	router.HandleFunc("/planet/{id}", returnSinglePlanet).Methods("GET")
-	router.HandleFunc("/planet/{id}", deletePlanet).Methods("DELETE")
-	router.HandleFunc("/planet/{id}", updatePlanet).Methods("PUT")
+	router.HandleFunc("/", interfaces.HomePage)
+	router.HandleFunc("/planets", interfaces.ReturnAllPlanets)
+	router.HandleFunc("/planet", interfaces.CreateNewPlanet).Methods("POST")
+	router.HandleFunc("/planet/{id}", interfaces.ReturnAllPlanets).Methods("GET")
+	router.HandleFunc("/planet/{id}", interfaces.DeletePlanet).Methods("DELETE")
+	router.HandleFunc("/planet/{id}", interfaces.UpdatePlanet).Methods("PUT")
 
 	log.Fatalln(http.ListenAndServe(":10000", router))
 }
@@ -43,59 +36,4 @@ func main() {
 	}
 
 	handleRequests()
-}
-
-func returnAllPlanets(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(Planets)
-}
-
-func returnSinglePlanet(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
-
-	for _, planet := range Planets {
-		if planet.ID == id {
-			json.NewEncoder(w).Encode(planet)
-		}
-	}
-}
-
-func createNewPlanet(w http.ResponseWriter, r *http.Request) {
-	reqBody, _ := io.ReadAll(r.Body)
-	var planet planet.Planet
-
-	json.Unmarshal(reqBody, &planet)
-
-	Planets = append(Planets, planet)
-	json.NewEncoder(w).Encode(planet)
-}
-
-func deletePlanet(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
-
-	for index, planet := range Planets {
-		if planet.ID == id {
-			Planets = append(Planets[:index], Planets[index+1:]...)
-		}
-	}
-}
-
-func updatePlanet(w http.ResponseWriter, r *http.Request) {
-	reqBody, _ := io.ReadAll(r.Body)
-	var newPlanet planet.Planet
-	json.Unmarshal(reqBody, &newPlanet)
-
-	vars := mux.Vars(r)
-	id := vars["id"]
-
-	if newPlanet.ID != id {
-		return
-	}
-
-	for index, planet := range Planets {
-		if planet.ID == id {
-			Planets[index] = newPlanet
-		}
-	}
 }
