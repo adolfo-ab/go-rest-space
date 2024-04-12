@@ -1,7 +1,9 @@
 package planet
 
+import "github.com/google/uuid"
+
 type Planet struct {
-	ID               string     `json:"Id"`
+	ID               uuid.UUID  `json:"Id"`
 	Name             string     `json:"Name"`
 	PlanetType       PlanetType `json:"PlanetType"`
 	Mass             float64    `json:"Mass"`
@@ -10,10 +12,10 @@ type Planet struct {
 	DistanceFromStar float64    `json:"DistanceFromStar"`
 }
 
-func NewPlanet(id string, name string, planetType PlanetType,
+func NewPlanet(name string, planetType PlanetType,
 	mass float64, radius float64, orbitalPeriod float64, distanceFromStar float64) *Planet {
 	return &Planet{
-		ID:               id,
+		ID:               uuid.New(),
 		Name:             name,
 		PlanetType:       planetType,
 		Mass:             mass,
