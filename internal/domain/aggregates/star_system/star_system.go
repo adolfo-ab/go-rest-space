@@ -32,3 +32,29 @@ func NewStarSystem(starName string) (StarSystem, error) {
 		planets: make([]*planet.Planet, 0),
 	}, nil
 }
+
+// Returns the ID of the star (root entity) of the star system aggregate
+func (s *StarSystem) GetID() uuid.UUID {
+	return s.star.ID
+}
+
+// Set the ID of the star (root entity) of the star system aggregate
+func (s *StarSystem) SetID(id uuid.UUID) {
+	if s.star == nil {
+		s.star = &star.Star{}
+	}
+	s.star.ID = id
+}
+
+// Returns the Name of the star (root entity) of the star system aggregate
+func (s *StarSystem) GetName() string {
+	return s.star.Name
+}
+
+// Set the Name of the star (root entity) of the star system aggregate
+func (s *StarSystem) SetName(name string) {
+	if s.star == nil {
+		s.star = &star.Star{}
+	}
+	s.star.Name = name
+}
