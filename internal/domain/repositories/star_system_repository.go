@@ -16,6 +16,6 @@ var (
 type StarSystemRepository interface {
 	Get(uuid.UUID) (star_system.StarSystem, error)
 	Add(star_system.StarSystem) error
-	Update(system star_system.StarSystem) error
-	Delete(uuid2 uuid.UUID) error
+	Update(star_system.StarSystem) error
+	Delete(uuid.UUID) error
 }

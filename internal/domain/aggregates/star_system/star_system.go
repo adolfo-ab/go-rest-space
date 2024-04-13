@@ -11,6 +11,7 @@ var (
 	ErrInvalidStar = errors.New("A star system needs a valid star")
 )
 
+// StarSystem is an aggregate that includes a Star (root entity) and Planets orbiting around it
 type StarSystem struct {
 	star    *star.Star
 	planets []*planet.Planet
