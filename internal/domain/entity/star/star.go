@@ -1,0 +1,31 @@
+package star
+
+import (
+	"github.com/google/uuid"
+	"main/internal/domain/value_object/star_type"
+)
+
+type Star struct {
+	ID          uuid.UUID          `json:"Id"`
+	Name        string             `json:"Name"`
+	StarType    star_type.StarType `json:"StarType"`
+	Mass        float64            `json:"Mass"`
+	Radius      float64            `json:"Radius"`
+	Temperature float64            `json:"Temperature"`
+	Luminosity  float64            `json:"Luminosity"`
+	Metallicity float64            `json:"Metallicity"`
+}
+
+func NewStar(name string, starType star_type.StarType, mass float64, radius float64,
+	temperature float64, luminosity float64, metallicity float64) *Star {
+	return &Star{
+		ID:          uuid.New(),
+		Name:        name,
+		StarType:    starType,
+		Mass:        mass,
+		Radius:      radius,
+		Temperature: temperature,
+		Luminosity:  luminosity,
+		Metallicity: metallicity,
+	}
+}
