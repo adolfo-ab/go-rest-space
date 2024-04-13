@@ -2,7 +2,7 @@ package planet
 
 import (
 	"github.com/google/uuid"
-	"main/internal/domain/value_object/planet_type"
+	"main/internal/domain/value_objects/planet_type"
 )
 
 type Planet struct {

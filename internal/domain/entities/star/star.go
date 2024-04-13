@@ -2,7 +2,7 @@ package star
 
 import (
 	"github.com/google/uuid"
-	"main/internal/domain/value_object/star_type"
+	"main/internal/domain/value_objects/star_type"
 )
 
 type Star struct {

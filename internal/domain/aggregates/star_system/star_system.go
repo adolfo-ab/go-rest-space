@@ -3,8 +3,8 @@ package star_system
 import (
 	"errors"
 	"github.com/google/uuid"
-	"main/internal/domain/entity/planet"
-	"main/internal/domain/entity/star"
+	"main/internal/domain/entities/planet"
+	"main/internal/domain/entities/star"
 )
 
 var (
