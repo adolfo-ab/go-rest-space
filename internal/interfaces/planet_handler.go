@@ -1,5 +1,6 @@
 package interfaces
 
+/*
 import (
 	"encoding/json"
 	"fmt"
@@ -79,3 +80,4 @@ func UpdatePlanet(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+*/

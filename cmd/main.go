@@ -7,5 +7,6 @@ import (
 var Planets []planet.Planet
 
 func main() {
-	handleRequests()
+	// handleRequests()
+	panic("hi")
 }
