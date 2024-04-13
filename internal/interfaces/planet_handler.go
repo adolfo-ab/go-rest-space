@@ -5,19 +5,20 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"io"
-	"main/internal/domain/planet"
+	"main/internal/domain/entity/planet"
+	"main/internal/domain/value_object/planet_type"
 	"net/http"
 )
 
 var Planets = []*planet.Planet{
-	planet.NewPlanet("Mercury", planet.Terrestrial, 0.330, 2439.7, 87.969, 57.9),
-	planet.NewPlanet("Venus", planet.Terrestrial, 4.87, 6051.8, 224.701, 108.2),
-	planet.NewPlanet("Earth", planet.Terrestrial, 5.97, 6371.0, 365.256, 149.6),
-	planet.NewPlanet("Mars", planet.Terrestrial, 0.642, 3389.5, 686.971, 227.9),
-	planet.NewPlanet("Jupiter", planet.GasGiant, 1898, 69911, 4332.59, 778.6),
-	planet.NewPlanet("Saturn", planet.GasGiant, 568, 58232, 10759.22, 1433.5),
-	planet.NewPlanet("Uranus", planet.IceGiant, 86.8, 25362, 30688.5, 2872.5),
-	planet.NewPlanet("Neptune", planet.IceGiant, 102, 24622, 60182, 4495.1),
+	planet.NewPlanet("Mercury", planet_type.Terrestrial, 0.330, 2439.7, 87.969, 57.9),
+	planet.NewPlanet("Venus", planet_type.Terrestrial, 4.87, 6051.8, 224.701, 108.2),
+	planet.NewPlanet("Earth", planet_type.Terrestrial, 5.97, 6371.0, 365.256, 149.6),
+	planet.NewPlanet("Mars", planet_type.Terrestrial, 0.642, 3389.5, 686.971, 227.9),
+	planet.NewPlanet("Jupiter", planet_type.GasGiant, 1898, 69911, 4332.59, 778.6),
+	planet.NewPlanet("Saturn", planet_type.GasGiant, 568, 58232, 10759.22, 1433.5),
+	planet.NewPlanet("Uranus", planet_type.IceGiant, 86.8, 25362, 30688.5, 2872.5),
+	planet.NewPlanet("Neptune", planet_type.IceGiant, 102, 24622, 60182, 4495.1),
 }
 
 func HomePage(w http.ResponseWriter, r *http.Request) {

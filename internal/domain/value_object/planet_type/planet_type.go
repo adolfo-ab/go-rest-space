@@ -1,4 +1,4 @@
-package planet
+package planet_type
 
 type PlanetType int
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"main/internal/domain/planet"
+	"main/internal/domain/entity/planet"
 )
 
 var Planets []planet.Planet
