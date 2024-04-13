@@ -15,17 +15,3 @@ type Star struct {
 	Luminosity  float64            `json:"Luminosity"`
 	Metallicity float64            `json:"Metallicity"`
 }
-
-func NewStar(name string, starType star_type.StarType, mass float64, radius float64,
-	temperature float64, luminosity float64, metallicity float64) *Star {
-	return &Star{
-		ID:          uuid.New(),
-		Name:        name,
-		StarType:    starType,
-		Mass:        mass,
-		Radius:      radius,
-		Temperature: temperature,
-		Luminosity:  luminosity,
-		Metallicity: metallicity,
-	}
-}
