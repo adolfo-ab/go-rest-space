@@ -46,7 +46,7 @@ func (mr *MemoryRepository) Add(s star_system.StarSystem) error {
 
 func (mr *MemoryRepository) Update(s star_system.StarSystem) error {
 	if _, ok := mr.starSystems[s.GetID()]; !ok {
-		return fmt.Errorf("star system does not exist: %w", star_system_repository.ErrUpdateStarSystem)
+		return star_system_repository.ErrUpdateStarSystem
 	}
 
 	mr.Lock()
