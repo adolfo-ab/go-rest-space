@@ -58,3 +58,16 @@ func (s *StarSystem) SetName(name string) {
 	}
 	s.star.Name = name
 }
+
+// Returns the Mass of the star (root entity) of the star system aggregate
+func (s *StarSystem) GetMass() float64 {
+	return s.star.Mass
+}
+
+// Set the Mass of the star (root entity) of the star system aggregate
+func (s *StarSystem) SetMass(mass float64) {
+	if s.star == nil {
+		s.star = &star.Star{}
+	}
+	s.star.Mass = mass
+}
