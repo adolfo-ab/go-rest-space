@@ -57,7 +57,7 @@ func (mr *MemoryRepository) Update(s star_system.StarSystem) error {
 
 func (mr *MemoryRepository) Delete(id uuid.UUID) error {
 	if _, ok := mr.starSystems[id]; !ok {
-		return fmt.Errorf("star system does not exist: %w", star_system_repository.ErrDeleteStarSystem)
+		return star_system_repository.ErrDeleteStarSystem
 	}
 	mr.Lock()
 	delete(mr.starSystems, id)

@@ -151,4 +151,45 @@ func TestMemory_UpddateStarSystem(t *testing.T) {
 	}
 }
 
-// TODO: Implement Delete Tests
+func TestMemory_DeleteStarSystem(t *testing.T) {
+	type testCase struct {
+		name        string
+		id          uuid.UUID
+		expectedErr error
+	}
+
+	// Create a new star system to add to the repo
+	starSystem, err := star_system.NewStarSystem("Antares")
+	if err != nil {
+		t.Fatal(err)
+	}
+	id := starSystem.GetID()
+
+	// Create repository and add test data
+	repo := MemoryRepository{
+		starSystems: map[uuid.UUID]star_system.StarSystem{
+			id: starSystem,
+		},
+	}
+
+	testCases := []testCase{
+		{
+			name:        "Try to delete invalid StarSystem",
+			id:          uuid.MustParse(fakeId),
+			expectedErr: star_system_repository.ErrDeleteStarSystem,
+		}, {
+			name:        "Delte StarSystem by ID",
+			id:          id,
+			expectedErr: nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := repo.Delete(tc.id)
+			if err != tc.expectedErr {
+				t.Errorf("Expected error %v, got %v", tc.expectedErr, err)
+			}
+		})
+	}
+}
