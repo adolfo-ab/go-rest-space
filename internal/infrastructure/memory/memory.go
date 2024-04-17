@@ -1,7 +1,6 @@
 package memory
 
 import (
-	"fmt"
 	"github.com/google/uuid"
 	"main/internal/domain/aggregates/star_system"
 	"main/internal/domain/repositories/star_system_repository"
@@ -27,6 +26,17 @@ func (mr *MemoryRepository) Get(id uuid.UUID) (star_system.StarSystem, error) {
 	return star_system.StarSystem{}, star_system_repository.ErrStarSystemNotFound
 }
 
+func (mr *MemoryRepository) GetAll() ([]star_system.StarSystem, error) {
+	if len(mr.starSystems) == 0 {
+		return nil, star_system_repository.ErrStarSystemRepoEmpty
+	}
+	var starSystems []star_system.StarSystem
+	for _, s := range mr.starSystems {
+		starSystems = append(starSystems, s)
+	}
+	return starSystems, nil
+}
+
 func (mr *MemoryRepository) Add(s star_system.StarSystem) error {
 	if mr.starSystems == nil {
 		mr.Lock()
@@ -35,7 +45,7 @@ func (mr *MemoryRepository) Add(s star_system.StarSystem) error {
 	}
 
 	if _, ok := mr.starSystems[s.GetID()]; ok {
-		return fmt.Errorf("star system already exists: %w", star_system_repository.ErrAddStarSystem)
+		return star_system_repository.ErrAddStarSystem
 	}
 
 	mr.Lock()
