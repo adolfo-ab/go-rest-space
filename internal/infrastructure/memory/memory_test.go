@@ -32,7 +32,7 @@ func TestMemory_GetStarSystem(t *testing.T) {
 
 	testCases := []testCase{
 		{
-			name:        "No StarSystem By ID",
+			name:        "No StarSystem by ID",
 			id:          uuid.MustParse(fakeId),
 			expectedErr: star_system_repository.ErrStarSystemNotFound,
 		}, {
@@ -53,17 +53,17 @@ func TestMemory_GetStarSystem(t *testing.T) {
 
 }
 
-func TestMemory_AddStarSystem(t *testing.T) {
+func TestMemory_AddStarSystems(t *testing.T) {
 	type testCase struct {
 		name        string
-		starSystem  string
+		starSystems []string
 		expectedErr error
 	}
 
 	testCases := []testCase{
 		{
-			name:        "Add Star System",
-			starSystem:  "Betelgeuse",
+			name:        "Add valid StarSystems",
+			starSystems: []string{"S1", "S2"},
 			expectedErr: nil,
 		},
 	}
@@ -74,22 +74,29 @@ func TestMemory_AddStarSystem(t *testing.T) {
 				starSystems: map[uuid.UUID]star_system.StarSystem{},
 			}
 
-			cust, err := star_system.NewStarSystem(tc.starSystem)
-			if err != nil {
-				t.Fatal(err)
+			for _, s := range tc.starSystems {
+				starSystem, err := star_system.NewStarSystem(s)
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				err = repo.Add(starSystem)
+				if err != tc.expectedErr {
+					t.Errorf("Expected error %v, got %v", tc.expectedErr, err)
+				}
+
+				found, err := repo.Get(starSystem.GetID())
+				if err != nil {
+					t.Fatal(err)
+				}
+
+				if found.GetID() != starSystem.GetID() {
+					t.Errorf("Expected %v, got %v", starSystem.GetID(), found.GetID())
+				}
 			}
 
-			err = repo.Add(cust)
-			if err != tc.expectedErr {
-				t.Errorf("Expected error %v, got %v", tc.expectedErr, err)
-			}
-
-			found, err := repo.Get(cust.GetID())
-			if err != nil {
-				t.Fatal(err)
-			}
-			if found.GetID() != cust.GetID() {
-				t.Errorf("Expected %v, got %v", cust.GetID(), found.GetID())
+			if len(tc.starSystems) != len(repo.starSystems) {
+				t.Errorf("Repo doesn't added all the star systems. Expected %v, got %v", len(tc.starSystems), len(repo.starSystems))
 			}
 		})
 	}
