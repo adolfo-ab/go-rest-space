@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"main/internal/domain/aggregates/star_system"
 	"main/internal/domain/repositories/star_system_repository"
+	"strconv"
 	"testing"
 )
 
@@ -51,6 +52,55 @@ func TestMemory_GetStarSystem(t *testing.T) {
 		})
 	}
 
+}
+
+func TestMemoryRepository_GetAllStarSystems(t *testing.T) {
+	type testCase struct {
+		name           string
+		numStarSystems int
+		expectedErr    error
+	}
+
+	testCases := []testCase{
+		{
+			name:           "Empty repo",
+			numStarSystems: 0,
+			expectedErr:    star_system_repository.ErrStarSystemRepoEmpty,
+		}, {
+			name:           "StarSystem By ID",
+			numStarSystems: 2,
+			expectedErr:    nil,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Create repo and add test data
+			repo := MemoryRepository{
+				starSystems: map[uuid.UUID]star_system.StarSystem{},
+			}
+			addTestStarSystems(&repo, tc.numStarSystems, t)
+
+			s, err := repo.GetAll()
+			if err != tc.expectedErr {
+				t.Errorf("Expected error %v, got %v", tc.expectedErr, err)
+			}
+			if len(s) != tc.numStarSystems {
+				t.Errorf("Wrong number of StarSytems %v, got %v", tc.numStarSystems, len(s))
+			}
+
+		})
+	}
+}
+
+func addTestStarSystems(repo *MemoryRepository, count int, t *testing.T) {
+	for i := 0; i < count; i++ {
+		starSystem, err := star_system.NewStarSystem(strconv.Itoa(i))
+		if err != nil {
+			t.Fatal(err)
+		}
+		repo.starSystems[starSystem.GetID()] = starSystem
+	}
 }
 
 func TestMemory_AddStarSystems(t *testing.T) {
