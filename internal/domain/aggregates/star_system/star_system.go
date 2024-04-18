@@ -137,11 +137,11 @@ func (s *StarSystem) SetMetallicity(m float64) error {
 
 func (s *StarSystem) GetPlanets() []*planet.Planet { return s.planets }
 
-func (s *StarSystem) SetPlanets(p []*planet.Planet) error {
+func (s *StarSystem) AddPlanet(p *planet.Planet) error {
 	if s.star == nil {
 		return ErrInvalidStar
 	}
-	s.planets = p
+	s.planets = append(s.planets, p)
 
 	return nil
 }
