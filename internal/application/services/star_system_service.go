@@ -24,10 +24,15 @@ type StarSystemService struct {
 	starSystems star_system_repository.StarSystemRepository
 }
 
-func NewStarSystemService() *StarSystemService {
+func NewStarSystemService(cfg StarSystemConfig) (*StarSystemService, error) {
 	s := &StarSystemService{}
 
-	return s
+	err := cfg(s)
+	if err != nil {
+		return nil, err
+	}
+
+	return s, nil
 }
 
 func (s *StarSystemService) CreateStarSystem(name string) error {
