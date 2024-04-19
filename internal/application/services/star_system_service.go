@@ -3,9 +3,22 @@ package services
 import (
 	"main/internal/domain/aggregates/star_system"
 	"main/internal/domain/repositories/star_system_repository"
+	"main/internal/infrastructure/memory"
 )
 
-// TODO: Add config
+type StarSystemConfig func(ss *StarSystemService) error
+
+func WithStarSystemRepository(sr star_system_repository.StarSystemRepository) StarSystemConfig {
+	return func(s *StarSystemService) error {
+		s.starSystems = sr
+		return nil
+	}
+}
+
+func WithMemoryStarSystemRepository() StarSystemConfig {
+	sr := memory.New()
+	return WithStarSystemRepository(sr)
+}
 
 type StarSystemService struct {
 	starSystems star_system_repository.StarSystemRepository
