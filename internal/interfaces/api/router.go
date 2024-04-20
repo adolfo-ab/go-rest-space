@@ -3,18 +3,22 @@ package api
 import (
 	"github.com/gorilla/mux"
 	"log"
+	"main/internal/interfaces/api/handlers"
 	"net/http"
 )
 
-func handleRequests() {
+func HandleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/", HomePage)
-	router.HandleFunc("/planets", ReturnAllPlanets)
-	router.HandleFunc("/planet", CreateNewPlanet).Methods("POST")
-	router.HandleFunc("/planet/{id}", ReturnSinglePlanet).Methods("GET")
-	router.HandleFunc("/planet/{id}", DeletePlanet).Methods("DELETE")
-	router.HandleFunc("/planet/{id}", UpdatePlanet).Methods("PUT")
+	// Home Page
+	router.HandleFunc("/", handlers.HomePage)
+
+	// Star System Routes
+	h := handlers.NewStarSystemHandler()
+	router.HandleFunc("/star/{id}", h.GetStarSystem).Methods("GET")
+	router.HandleFunc("/star", h.CreateStarSystem).Methods("POST")
+	router.HandleFunc("/star/{id}", h.UpdateStarSystem).Methods("PUT")
+	router.HandleFunc("/star/{id}", h.DeleteStarSystem).Methods("DELETE")
 
 	log.Fatalln(http.ListenAndServe(":10000", router))
 }
