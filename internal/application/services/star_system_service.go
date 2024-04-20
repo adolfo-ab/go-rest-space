@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"main/internal/domain/aggregates/star_system"
 	"main/internal/domain/repositories/star_system_repository"
 	"main/internal/infrastructure/memory"
@@ -43,4 +44,20 @@ func (s *StarSystemService) CreateStarSystem(name string) error {
 
 	err = s.starSystems.Add(starSystem)
 	return err
+}
+
+func (s *StarSystemService) GetStarSystem(id uuid.UUID) (*star_system.StarSystem, error) {
+	st, err := s.starSystems.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	return &st, nil
+}
+
+func (s *StarSystemService) UpdateStarSystem(starSystem star_system.StarSystem) error {
+	return s.starSystems.Update(starSystem)
+}
+
+func (s *StarSystemService) DeleteStarSystem(id uuid.UUID) error {
+	return s.starSystems.Delete(id)
 }
