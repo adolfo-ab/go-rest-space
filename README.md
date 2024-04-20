@@ -1,6 +1,6 @@
 # go-rest-space
 
-A small REST API built in Go trying to follow DDD patterns.
+A small REST API built in Go applying DDD patterns.
 
 ---
 References:
