@@ -1,12 +1,7 @@
 package main
 
-import (
-	"main/internal/domain/entities/planet"
-)
-
-var Planets []planet.Planet
+import "main/internal/interfaces/api"
 
 func main() {
-	// handleRequests()
-	panic("hi")
+	api.HandleRequests()
 }
